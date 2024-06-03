@@ -8,7 +8,6 @@ export default function ProductDetails() {
 
   const { isLoading, data: product } = useSingleProductQuery(id as string);
   if (isLoading) return <p>Loading...</p>;
-  console.log(product);
 
   return (
     <>
