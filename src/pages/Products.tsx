@@ -65,6 +65,7 @@ export default function Products() {
         </div>
       </div>
       <div className="col-span-9 grid grid-cols-3 gap-10 pb-20">
+        {isLoading && <p>Loading...</p>}
         {data?.data?.map((product) => (
           <ProductCard product={product} />
         ))}
