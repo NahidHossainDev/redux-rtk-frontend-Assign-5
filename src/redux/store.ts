@@ -9,6 +9,8 @@ const store = configureStore({
     products: productReducer,
     [apis.reducerPath]: apis.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apis.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
