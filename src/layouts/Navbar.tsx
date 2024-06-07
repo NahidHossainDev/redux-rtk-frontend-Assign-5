@@ -1,4 +1,8 @@
+import { auth } from '@/lib/firebase';
+import { getUserState, setSignOut } from '@/redux/features/user/userSlice';
+import { signOut } from 'firebase/auth';
 import { HiOutlineSearch } from 'react-icons/hi';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import logo from '../assets/images/technet-logo.png';
 import Cart from '../components/Cart';
@@ -14,6 +18,18 @@ import {
 } from '../components/ui/dropdown-menu';
 
 export default function Navbar() {
+  const { isLoading, isAuthenticate, userData } = useSelector(getUserState);
+  const dispatch = useDispatch();
+
+  const handleSignout = () => {
+    signOut(auth)
+      .then(() => {
+        dispatch(setSignOut());
+      })
+      .catch((error) => {
+        // An error happened.
+      });
+  };
   return (
     <nav className="w-full h-16 fixed top backdrop-blur-lg z-10">
       <div className="h-full w-full bg-white/60">
@@ -48,11 +64,12 @@ export default function Navbar() {
               </li>
               <li className="ml-5">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="outline-none">
+                  <DropdownMenuTrigger className="outline-none flex gap-2 align-middle">
                     <Avatar>
                       <AvatarImage src="https://github.com/shadcn.png" />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
+                    <span>{userData?.email}</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
                     <DropdownMenuLabel>Account</DropdownMenuLabel>
@@ -60,16 +77,27 @@ export default function Navbar() {
                     <DropdownMenuItem className="cursor-pointer">
                       Profile
                     </DropdownMenuItem>
-                    <Link to="/login">
-                      <DropdownMenuItem className="cursor-pointer">
-                        Login
+                    {isAuthenticate ? (
+                      <DropdownMenuItem
+                        className="cursor-pointer"
+                        onClick={handleSignout}
+                      >
+                        Logout
                       </DropdownMenuItem>
-                    </Link>
-                    <Link to="/signup">
-                      <DropdownMenuItem className="cursor-pointer">
-                        Sign up
-                      </DropdownMenuItem>
-                    </Link>
+                    ) : (
+                      <>
+                        <Link to="/login">
+                          <DropdownMenuItem className="cursor-pointer">
+                            Login
+                          </DropdownMenuItem>
+                        </Link>
+                        <Link to="/signup">
+                          <DropdownMenuItem className="cursor-pointer">
+                            Sign up
+                          </DropdownMenuItem>
+                        </Link>
+                      </>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </li>
