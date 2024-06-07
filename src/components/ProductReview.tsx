@@ -9,16 +9,11 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 
-const dummyComments = [
-  'Bhalo na',
-  'Ki shob ghori egula??',
-  'Eta kono product holo ??',
-  '200 taka dibo, hobe ??',
-];
-
 export default function ProductReview() {
   const { id } = useParams();
-  const { data } = useGetCommentsQuery(id as string);
+  const { data } = useGetCommentsQuery(id as string, {
+    refetchOnMountOrArgChange: true,
+  });
   const [addComment, comment] = useAddCommentMutation();
 
   const [text, setText] = useState<string>('');
