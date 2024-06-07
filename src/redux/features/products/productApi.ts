@@ -3,8 +3,11 @@ import { IProduct, IProductsData } from './interface';
 
 export const productApi = apis.injectEndpoints({
   endpoints: (builder) => ({
-    getProducts: builder.query<IProductsData, unknown>({
-      query: () => '/products',
+    getProducts: builder.query<IProductsData, Record<string, any>>({
+      query: (filters) => ({
+        url: '/products',
+        params: filters,
+      }),
     }),
     singleProduct: builder.query<IProduct, string>({
       query: (id) => `/product/${id}`,
